@@ -238,14 +238,26 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-8 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
-          <p className="font-medium text-slate-700 dark:text-slate-300">© {new Date().getFullYear()} RentAstra</p>
-          <p>
-            Developed by{" "}
-            <span className="font-semibold text-indigo-600 dark:text-indigo-400">Sayyed Sameer Basir</span>
-          </p>
-          <p className="font-mono text-slate-600 dark:text-slate-300">v1.0.1-alpha</p>
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-10 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-6 text-sm">
+            <Link to="/features" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Features</Link>
+            <Link to="/pricing" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Pricing</Link>
+            <Link to="/blog" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Blog</Link>
+            <Link to="/help" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Help</Link>
+            <Link to="/about" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">About</Link>
+            <Link to="/contact" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</Link>
+            <Link to="/privacy" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Privacy</Link>
+            <Link to="/terms" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">Terms</Link>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+            <p className="font-medium text-slate-700 dark:text-slate-300">© {new Date().getFullYear()} RentAstra</p>
+            <p>
+              Developed by{" "}
+              <span className="font-semibold text-indigo-600 dark:text-indigo-400">Sayyed Sameer Basir</span>
+            </p>
+            <p className="font-mono text-slate-600 dark:text-slate-300">v1.0.1-alpha</p>
+          </div>
         </div>
       </footer>
     </div>

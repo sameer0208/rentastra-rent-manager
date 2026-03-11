@@ -7,10 +7,21 @@ import Payments from "./pages/Payments";
 import Rooms from "./pages/Rooms";
 import Family from "./pages/Family";
 import Layout from "./layouts/Layout";
+import PublicLayout from "./layouts/PublicLayout";
 import { isLoggedIn } from "./utils/auth";
 import VacatedGuests from "./pages/VacatedGuests";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Privacy from "./pages/public/Privacy";
+import About from "./pages/public/About";
+import Contact from "./pages/public/Contact";
+import Terms from "./pages/public/Terms";
+import Features from "./pages/public/Features";
+import Pricing from "./pages/public/Pricing";
+import Help from "./pages/public/Help";
+import HelpDetail from "./pages/public/HelpDetail";
+import Blog from "./pages/public/Blog";
+import BlogArticle from "./pages/public/BlogArticle";
 
 /** Protects app routes: redirect to landing if not authenticated */
 const ProtectedRoute = ({ children }) => {
@@ -38,6 +49,18 @@ function App() {
         {/* AUTH (redirect to dashboard if already logged in) */}
         <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
         <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+
+        {/* PUBLIC PAGES (with shared navbar + footer) */}
+        <Route path="/privacy" element={<PublicLayout><Privacy /></PublicLayout>} />
+        <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+        <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+        <Route path="/terms" element={<PublicLayout><Terms /></PublicLayout>} />
+        <Route path="/features" element={<PublicLayout><Features /></PublicLayout>} />
+        <Route path="/pricing" element={<PublicLayout><Pricing /></PublicLayout>} />
+        <Route path="/help" element={<PublicLayout><Help /></PublicLayout>} />
+        <Route path="/help/:slug" element={<PublicLayout><HelpDetail /></PublicLayout>} />
+        <Route path="/blog" element={<PublicLayout><Blog /></PublicLayout>} />
+        <Route path="/blog/:slug" element={<PublicLayout><BlogArticle /></PublicLayout>} />
 
         {/* PROTECTED APP */}
         <Route

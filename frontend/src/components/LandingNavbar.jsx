@@ -26,6 +26,9 @@ export default function LandingNavbar() {
 
           {/* Desktop */}
           <div className="hidden sm:flex items-center gap-3">
+            <Link to="/features" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hidden md:inline">Features</Link>
+            <Link to="/pricing" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hidden md:inline">Pricing</Link>
+            <Link to="/blog" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hidden lg:inline">Blog</Link>
             <button
               type="button"
               onClick={toggleTheme}
@@ -72,21 +75,17 @@ export default function LandingNavbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4 space-y-2">
-          <Link
-            to="/register"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-xl font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            Join
-          </Link>
-          <Link
-            to="/login"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-3 rounded-xl font-semibold bg-indigo-600 text-white text-center hover:bg-indigo-700"
-          >
-            Sign In
-          </Link>
+        <div className="sm:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4 space-y-1">
+          <Link to="/features" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Features</Link>
+          <Link to="/pricing" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Pricing</Link>
+          <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Blog</Link>
+          <Link to="/help" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Help</Link>
+          <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">About</Link>
+          <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Contact</Link>
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-2 mt-2 space-y-1">
+            <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Join</Link>
+            <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl font-semibold bg-indigo-600 text-white text-center hover:bg-indigo-700">Sign In</Link>
+          </div>
         </div>
       )}
     </nav>
