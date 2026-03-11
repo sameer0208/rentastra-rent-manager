@@ -16,7 +16,7 @@ export default function LandingNavbar() {
             className="flex items-center gap-2 text-xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
           >
             <img
-              src="/src/static/images/logo.jpg"
+              src="/src/assets/images/logo.jpg"
               alt="RentAstra Logo"
               className="w-9 h-9 object-contain"
             />

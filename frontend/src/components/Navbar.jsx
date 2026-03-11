@@ -169,7 +169,7 @@ export default function Navbar() {
             {/* Logo + property (desktop: full; mobile: logo only, property in drawer) */}
             <span className="text-base sm:text-lg font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2 min-w-0">
               <img
-                src="/src/static/images/logo.jpg"
+                src="/src/assets/images/logo.jpg"
                 alt="RentAstra Logo"
                 className="inline-block w-8 h-8 sm:w-10 sm:h-10 -mt-1 flex-shrink-0"
               />
