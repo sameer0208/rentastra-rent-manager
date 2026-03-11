@@ -111,7 +111,7 @@ export default function Landing() {
               } ${phase === "logo" ? "animate-intro-logo" : ""}`}
             >
               <img
-                src="/src/static/images/logo.jpg"
+                src="/src/assets/images/logo.jpg"
                 alt="RentAstra"
                 className="max-h-[140px] sm:max-h-[200px] w-auto object-contain rounded-2xl shadow-2xl shadow-indigo-500/20 ring-2 ring-white/10"
               />
