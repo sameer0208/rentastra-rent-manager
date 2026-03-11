@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import logoImage from "../assets/images/logo.jpg";
 
 export default function LandingNavbar() {
   const { theme, toggleTheme } = useTheme();
@@ -16,7 +17,7 @@ export default function LandingNavbar() {
             className="flex items-center gap-2 text-xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
           >
             <img
-              src="/src/assets/images/logo.jpg"
+              src={logoImage}
               alt="RentAstra Logo"
               className="w-9 h-9 object-contain"
             />
