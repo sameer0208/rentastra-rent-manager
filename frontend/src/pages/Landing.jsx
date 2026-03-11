@@ -1,8 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Building2, Users, CreditCard, LayoutGrid, BarChart3, ArrowRight } from "lucide-react";
+import { Building2, Users, CreditCard, LayoutGrid, BarChart3, ArrowRight, ChevronLeft, ChevronRight, Sparkles, Shield, Zap, Quote } from "lucide-react";
 import LandingNavbar from "../components/LandingNavbar";
 import logoImage from "../assets/images/logo.jpg";
+
+const CAROUSEL_SLIDES = [
+  {
+    icon: Zap,
+    title: "Everything in one place",
+    text: "Guests, rooms, payments, and documents—no more switching between spreadsheets and notes.",
+    accent: "from-amber-500 to-orange-500",
+  },
+  {
+    icon: Shield,
+    title: "Stay compliant, stress-free",
+    text: "Track police verification and family details so you're always ready for checks and audits.",
+    accent: "from-emerald-500 to-teal-500",
+  },
+  {
+    icon: Sparkles,
+    title: "Receipts in one click",
+    text: "Generate and print professional rent receipts the moment payment is recorded.",
+    accent: "from-violet-500 to-purple-600",
+  },
+  {
+    icon: Quote,
+    title: "Built for landlords like you",
+    text: "Designed to save time so you can focus on your property and your tenants.",
+    accent: "from-indigo-500 to-blue-500",
+  },
+];
 
 const INTRO_TYPING_TEXT = "RentAstra: The Ultimate Rent Manager";
 const TYPING_INTERVAL_MS = 70;
@@ -33,11 +60,15 @@ const features = [
   },
 ];
 
+const CAROUSEL_INTERVAL_MS = 5000;
+
 export default function Landing() {
   const [showIntro, setShowIntro] = useState(true);
   const [typedLength, setTypedLength] = useState(0);
   const [phase, setPhase] = useState("typing"); // 'typing' | 'logo' | 'fadeout' | 'done'
   const [introFadeOut, setIntroFadeOut] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselKey, setCarouselKey] = useState(0);
 
   // Typing effect
   useEffect(() => {
@@ -69,6 +100,20 @@ export default function Landing() {
     }, INTRO_FADEOUT_MS);
     return () => clearTimeout(hideTimer);
   }, [introFadeOut]);
+
+  // Carousel auto-advance
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCarouselIndex((i) => (i + 1) % CAROUSEL_SLIDES.length);
+      setCarouselKey((k) => k + 1);
+    }, CAROUSEL_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, []);
+
+  const goToSlide = useCallback((idx) => {
+    setCarouselIndex(idx);
+    setCarouselKey((k) => k + 1);
+  }, []);
 
   const skipIntro = () => {
     setIntroFadeOut(true);
@@ -125,7 +170,7 @@ export default function Landing() {
 
       {/* Hero */}
       <section
-        className="relative pt-28 pb-20 sm:pt-36 sm:pb-28 px-4 sm:px-6 overflow-hidden"
+        className="relative pt-28 pb-20 sm:pt-36 sm:pb-28 px-4 sm:px-6 overflow-hidden landing-hero-pattern"
         style={{
           background: "linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 100%)",
         }}
@@ -184,9 +229,78 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Carousel */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-10">
+            Why landlords choose RentAstra
+          </h2>
+          <div className="relative rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden min-h-[220px] sm:min-h-[260px] flex flex-col justify-center">
+            {/* Slides */}
+            {CAROUSEL_SLIDES.map((slide, idx) => {
+              const Icon = slide.icon;
+              const isActive = idx === carouselIndex;
+              return (
+                <div
+                  key={`${idx}-${carouselKey}`}
+                  className={`absolute inset-0 flex flex-col items-center justify-center px-8 py-12 sm:px-16 sm:py-14 text-center transition-opacity duration-500 ${
+                    isActive ? "opacity-100 z-10 carousel-slide-enter" : "opacity-0 z-0 pointer-events-none"
+                  }`}
+                >
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${slide.accent} flex items-center justify-center shadow-lg mb-6`}>
+                    <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{slide.title}</h3>
+                  <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                    {slide.text}
+                  </p>
+                </div>
+              );
+            })}
+            {/* Prev / Next */}
+            <button
+              type="button"
+              onClick={() => {
+                const prev = (carouselIndex - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length;
+                goToSlide(prev);
+              }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 shadow-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => goToSlide((carouselIndex + 1) % CAROUSEL_SLIDES.length)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 shadow-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            {/* Dots */}
+            <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-2">
+              {CAROUSEL_SLIDES.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => goToSlide(idx)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    idx === carouselIndex
+                      ? "bg-indigo-600 dark:bg-indigo-500 scale-125"
+                      : "bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500"
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 sm:py-28 px-4 sm:px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-indigo-50/30 to-slate-50 dark:from-slate-900 dark:via-indigo-950/20 dark:to-slate-950 pointer-events-none" />
+        <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-14">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
               Everything you need to run rentals
@@ -199,7 +313,7 @@ export default function Landing() {
             {features.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="group relative p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300"
+                className="group relative p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-lg shadow-slate-200/30 dark:shadow-none hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-900/20 hover:border-indigo-200 dark:hover:border-indigo-800 hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6" />
@@ -214,7 +328,7 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="py-20 sm:py-28 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto text-center p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-700 dark:to-violet-800 text-white shadow-2xl">
+        <div className="max-w-3xl mx-auto text-center p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 dark:from-indigo-700 dark:to-violet-800 text-white shadow-2xl shadow-indigo-500/25 dark:shadow-indigo-900/30 ring-2 ring-white/10 hover:shadow-indigo-500/30 dark:hover:shadow-indigo-900/40 transition-shadow duration-300">
           <h2 className="text-2xl sm:text-3xl font-bold">Ready to simplify your rentals?</h2>
           <p className="mt-4 text-indigo-100">
             Create your account in minutes. No credit card required.

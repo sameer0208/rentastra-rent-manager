@@ -70,6 +70,30 @@
   animation: introFadeOut 0.8s ease-out forwards;
 }
 
+/* Landing carousel */
+@keyframes carouselFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carousel-slide-enter {
+  animation: carouselFadeIn 0.5s ease-out forwards;
+}
+
+/* Subtle grid background for landing */
+.landing-hero-pattern {
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
 @keyframes scaleIn {
   from {
     opacity: 0;
