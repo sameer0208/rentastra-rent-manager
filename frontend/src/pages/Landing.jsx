@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Building2, Users, CreditCard, LayoutGrid, BarChart3, ArrowRight } from "lucide-react";
 import LandingNavbar from "../components/LandingNavbar";
+import logoImage from "../assets/images/logo.jpg";
 
 const INTRO_TYPING_TEXT = "RentAstra: The Ultimate Rent Manager";
 const TYPING_INTERVAL_MS = 70;
@@ -111,7 +112,7 @@ export default function Landing() {
               } ${phase === "logo" ? "animate-intro-logo" : ""}`}
             >
               <img
-                src="/src/assets/images/logo.jpg"
+                src={logoImage}
                 alt="RentAstra"
                 className="max-h-[140px] sm:max-h-[200px] w-auto object-contain rounded-2xl shadow-2xl shadow-indigo-500/20 ring-2 ring-white/10"
               />
