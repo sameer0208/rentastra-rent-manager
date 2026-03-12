@@ -6,6 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon, Home } from "lucide-react";
 import { fetchCountries, fetchStatesByCountry } from "../services/countriesApi";
 import PincodeInput from "../components/PincodeInput";
+import SEO from "../components/SEO";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -97,6 +98,11 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center p-4 transition-colors duration-300 relative">
+      <SEO
+        title="Create Account"
+        description="Create your free RentAstra account. Manage multiple properties, guests, rent payments, and receipts in one place. No credit card required."
+        path="/register"
+      />
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
         <Link
           to="/"

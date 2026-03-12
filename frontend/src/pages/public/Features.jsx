@@ -1,5 +1,6 @@
 import { Users, CreditCard, LayoutGrid, History, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "../../components/SEO";
 
 const features = [
   {
@@ -32,6 +33,11 @@ const features = [
 export default function Features() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Features"
+        description="Guest management, rent tracking, room management, payment history, and family details – everything you need to manage rentals in one place with RentAstra."
+        path="/features"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Features</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-12">Everything you need to manage rentals in one place.</p>
 

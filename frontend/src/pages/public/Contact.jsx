@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, MessageSquare, HelpCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import SEO from "../../components/SEO";
 
 const SUPPORT_EMAIL = "support@rentastra.com";
 
@@ -25,6 +26,11 @@ export default function Contact() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Contact Us"
+        description="Get in touch with RentAstra for support, general inquiries, or feedback. We typically respond within 24–48 hours."
+        path="/contact"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Contact Us</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-10">Get in touch for support or general inquiries.</p>
 

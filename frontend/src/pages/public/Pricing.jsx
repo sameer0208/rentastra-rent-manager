@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "../../components/SEO";
 
 const freePlanFeatures = [
   "Unlimited guests",
@@ -15,6 +16,11 @@ const freePlanFeatures = [
 export default function Pricing() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Pricing"
+        description="RentAstra pricing: simple, transparent. Free plan with unlimited guests, rooms, rent tracking, receipts, and more. No credit card required."
+        path="/pricing"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Pricing</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-10">Simple, transparent pricing. Everything you need is free for now.</p>
 

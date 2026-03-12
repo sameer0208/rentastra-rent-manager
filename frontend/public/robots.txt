@@ -1,0 +1,14 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Public pages only; avoid indexing app routes (dashboard, profile, etc. require auth)
+Disallow: /dashboard
+Disallow: /guests
+Disallow: /payments
+Disallow: /rooms
+Disallow: /profile
+Disallow: /vacated-guests
+
+# Sitemap (replace with your production URL if different)
+Sitemap: https://rentastra-rent-frontend.onrender.com/sitemap.xml

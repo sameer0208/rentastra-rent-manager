@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FileText, ArrowRight } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const ARTICLES = [
   { slug: "manage-rental-properties-efficiently", title: "How to Manage Rental Properties Efficiently" },
@@ -12,6 +13,11 @@ const ARTICLES = [
 export default function Blog() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Blog & Articles"
+        description="Tips and guides for landlords and property managers: rental management, tenant management, rent tracking, and rental agreements."
+        path="/blog"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Blog & Articles</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-10">Tips and guides for landlords and property managers.</p>
 
