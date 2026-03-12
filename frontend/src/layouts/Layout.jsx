@@ -13,7 +13,6 @@ export default function Layout({ children }) {
         style={{
           paddingTop: "calc(3.5rem + env(safe-area-inset-top, 0px))",
           paddingBottom: "calc(3rem + env(safe-area-inset-bottom, 0px))",
-          minHeight: "100vh",
           minHeight: "100dvh",
         }}
       >

@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const { fullName, email, phone, password, propertyName, propertyAddress } =
+    const { fullName, email, phone, password, propertyName, propertyAddress, country, state, city, pincode } =
       req.body;
 
     if (!fullName || !email || !phone || !password || !propertyName) {
@@ -34,6 +34,10 @@ export const register = async (req, res) => {
       password: hashedPassword,
       propertyName: trimmedName,
       propertyAddress: trimmedAddress,
+      country: country != null ? String(country).trim() : "",
+      state: state != null ? String(state).trim() : "",
+      city: city != null ? String(city).trim() : "",
+      pincode: pincode != null ? String(pincode).trim().replace(/\D/g, "").slice(0, 10) : "",
     });
 
     const createdProperty = await Property.create({
@@ -87,7 +91,12 @@ export const getMe = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user);
+    const payload = user.toObject ? user.toObject() : { ...user };
+    payload.country = payload.country ?? "";
+    payload.state = payload.state ?? "";
+    payload.city = payload.city ?? "";
+    payload.pincode = payload.pincode ?? "";
+    res.json(payload);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch profile" });
   }
@@ -96,7 +105,7 @@ export const getMe = async (req, res) => {
 /** PUT update profile (fullName, phone, propertyName, propertyAddress only; email not editable). Optional propertyId syncs that property's name/address. */
 export const updateProfile = async (req, res) => {
   try {
-    const { fullName, phone, propertyName, propertyAddress, propertyId } = req.body || {};
+    const { fullName, phone, propertyName, propertyAddress, propertyId, country, state, city, pincode } = req.body || {};
     const user = await User.findById(req.user.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -119,6 +128,10 @@ export const updateProfile = async (req, res) => {
       user.propertyName = trimmed;
     }
     if (propertyAddress !== undefined) user.propertyAddress = propertyAddress == null ? "" : String(propertyAddress).trim();
+    if (country !== undefined) user.country = country == null ? "" : String(country).trim();
+    if (state !== undefined) user.state = state == null ? "" : String(state).trim();
+    if (city !== undefined) user.city = city == null ? "" : String(city).trim();
+    if (pincode !== undefined) user.pincode = pincode == null ? "" : String(pincode).replace(/\D/g, "").slice(0, 10);
     await user.save();
 
     let propToSync = null;
@@ -148,7 +161,13 @@ export const updateProfile = async (req, res) => {
     const updated = await User.findById(user._id).select(
       "-password -loginAttempts -passwordChangedAt"
     );
-    res.json(updated);
+    if (!updated) return res.status(500).json({ message: "Failed to return updated profile" });
+    const payload = updated.toObject ? updated.toObject() : { ...updated };
+    payload.country = payload.country ?? "";
+    payload.state = payload.state ?? "";
+    payload.city = payload.city ?? "";
+    payload.pincode = payload.pincode ?? "";
+    res.json(payload);
   } catch (error) {
     const message = error.message || "Failed to update profile";
     return res.status(500).json({ message });

@@ -44,6 +44,11 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    country: { type: String, trim: true, default: "" },
+    state: { type: String, trim: true, default: "" },
+    city: { type: String, trim: true, default: "" },
+    pincode: { type: String, trim: true, default: "" },
+
     /** Links to the Property created at registration; profile name/address edits update this Property */
     primaryProperty: {
       type: mongoose.Schema.Types.ObjectId,

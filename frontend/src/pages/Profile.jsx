@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import toast from "react-hot-toast";
-import { User, Mail, Phone, Building2, MapPin, ArrowLeft, Pencil } from "lucide-react";
+import { User, Mail, Phone, Building2, MapPin, ArrowLeft, Pencil, Globe, MapPinned } from "lucide-react";
 import { useUser } from "../context/UserContext";
 import { useProperty } from "../context/PropertyContext";
+import { fetchCountries, fetchStatesByCountry } from "../services/countriesApi";
+import PincodeInput from "../components/PincodeInput";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -18,8 +20,15 @@ export default function Profile() {
     phone: "",
     propertyName: "",
     propertyAddress: "",
+    country: "",
+    state: "",
+    city: "",
+    pincode: "",
   });
   const [saving, setSaving] = useState(false);
+  const [countries, setCountries] = useState([{ name: "India", code: "IN" }]);
+  const [states, setStates] = useState([]);
+  const [statesLoading, setStatesLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,6 +42,10 @@ export default function Profile() {
             phone: res.data.phone || "",
             propertyName: res.data.propertyName || "",
             propertyAddress: res.data.propertyAddress || "",
+            country: res.data.country || "",
+            state: res.data.state || "",
+            city: res.data.city || "",
+            pincode: res.data.pincode || "",
           });
         }
       })
@@ -53,9 +66,35 @@ export default function Profile() {
       phone: user?.phone || "",
       propertyName: user?.propertyName || "",
       propertyAddress: user?.propertyAddress || "",
+      country: user?.country || "",
+      state: user?.state || "",
+      city: user?.city || "",
+      pincode: user?.pincode || "",
     });
     setEditing(true);
   };
+
+  useEffect(() => {
+    fetchCountries()
+      .then((list) => setCountries(Array.isArray(list) && list.length ? list : [{ name: "India", code: "IN" }]))
+      .catch(() => setCountries([{ name: "India", code: "IN" }]));
+  }, []);
+
+  useEffect(() => {
+    if (!editForm.country) {
+      setStates([]);
+      return;
+    }
+    if (!editing) return;
+    setStatesLoading(true);
+    fetchStatesByCountry(editForm.country)
+      .then((list) => {
+        setStates(list);
+        setEditForm((f) => ({ ...f, state: list.includes(f.state) ? f.state : "" }));
+      })
+      .catch(() => setStates([]))
+      .finally(() => setStatesLoading(false));
+  }, [editForm.country, editing]);
 
   const cancelEdit = () => {
     setEditing(false);
@@ -70,11 +109,19 @@ export default function Profile() {
     }
     setSaving(true);
     try {
+      const country = typeof editForm.country === "string" ? editForm.country.trim() : "";
+      const state = typeof editForm.state === "string" ? editForm.state.trim() : "";
+      const city = typeof editForm.city === "string" ? editForm.city.trim() : "";
+      const pincode = typeof editForm.pincode === "string" ? String(editForm.pincode).replace(/\D/g, "").slice(0, 10) : "";
       const res = await api.put("/auth/me", {
         fullName: editForm.fullName,
         phone: editForm.phone,
         propertyName: editForm.propertyName,
         propertyAddress: editForm.propertyAddress,
+        country,
+        state,
+        city,
+        pincode,
         propertyId: currentPropertyId || undefined,
       });
       setUser(res.data);
@@ -113,11 +160,11 @@ export default function Profile() {
     { label: "Email", value: user.email, icon: Mail },
     { label: "Mobile Number", value: user.phone, icon: Phone },
     { label: "Property Name", value: user.propertyName, icon: Building2 },
-    {
-      label: "Property Address",
-      value: user.propertyAddress || "Not provided",
-      icon: MapPin,
-    },
+    { label: "Property Address", value: user.propertyAddress || "Not provided", icon: MapPin },
+    { label: "Country", value: user.country || "Not provided", icon: Globe },
+    { label: "State", value: user.state || "Not provided", icon: MapPinned },
+    { label: "City", value: user.city || "Not provided", icon: MapPinned },
+    { label: "Pincode", value: user.pincode || "Not provided", icon: MapPin },
   ];
 
   return (
@@ -220,6 +267,72 @@ export default function Profile() {
                     className="mt-1 w-full border border-slate-300 dark:border-slate-500 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
                     placeholder="Optional"
                   />
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <Globe className="w-5 h-5" strokeWidth={1.5} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Country</label>
+                  <select
+                    value={editForm.country}
+                    onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
+                    className="mt-1 w-full border border-slate-300 dark:border-slate-500 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
+                  >
+                    <option value="">Select country</option>
+                    {countries.map((c) => (
+                      <option key={c.code || c.name} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <MapPinned className="w-5 h-5" strokeWidth={1.5} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">State</label>
+                  <select
+                    value={editForm.state}
+                    onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
+                    disabled={!editForm.country || statesLoading}
+                    className="mt-1 w-full border border-slate-300 dark:border-slate-500 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 disabled:opacity-60"
+                  >
+                    <option value="">Select state</option>
+                    {states.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <MapPinned className="w-5 h-5" strokeWidth={1.5} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">City</label>
+                  <input
+                    type="text"
+                    value={editForm.city}
+                    onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                    className="mt-1 w-full border border-slate-300 dark:border-slate-500 rounded-lg px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
+                    placeholder="City"
+                  />
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <MapPin className="w-5 h-5" strokeWidth={1.5} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pincode (6 digits)</label>
+                  <div className="mt-1">
+                    <PincodeInput
+                      value={editForm.pincode}
+                      onChange={(val) => setEditForm({ ...editForm, pincode: val })}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex gap-3">
