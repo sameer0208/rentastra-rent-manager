@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BookOpen, ArrowRight } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const guides = [
   {
@@ -27,6 +28,11 @@ const guides = [
 export default function Help() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Help & Documentation"
+        description="Step-by-step guides for RentAstra: add guests, track rent payments, mark tenants vacated, manage family members and documents."
+        path="/help"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Help & Documentation</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-10">Step-by-step guides to get the most out of RentAstra.</p>
 

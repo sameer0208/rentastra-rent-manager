@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { Building2, Target, Users, Heart } from "lucide-react";
+import SEO from "../../components/SEO";
 
 export default function About() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="About RentAstra"
+        description="RentAstra is a rent and property management platform for landlords and property managers. Manage multiple properties, guests, rent payments, and compliance in one place."
+        path="/about"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">About RentAstra</h1>
       <p className="text-lg text-slate-600 dark:text-slate-400 mb-10">Simplifying rental management for property owners and managers.</p>
 

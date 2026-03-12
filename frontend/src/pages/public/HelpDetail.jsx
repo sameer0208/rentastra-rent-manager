@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const HELP_CONTENT = {
   "add-a-guest": {
@@ -47,10 +48,13 @@ const HELP_CONTENT = {
 export default function HelpDetail() {
   const { slug } = useParams();
   const content = slug ? HELP_CONTENT[slug] : null;
+  const title = content?.title || "Help";
+  const description = content ? `${content.title} – Step-by-step guide for RentAstra.` : "RentAstra help and documentation.";
 
   if (!content) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
+        <SEO title="Help" description={description} path="/help" noindex />
         <p className="text-slate-600 dark:text-slate-400">Guide not found.</p>
         <Link to="/help" className="mt-4 inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Back to Help
@@ -61,6 +65,7 @@ export default function HelpDetail() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO title={title} description={description} path={`/help/${slug}`} />
       <Link to="/help" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-8">
         <ArrowLeft className="w-4 h-4" /> Back to Help
       </Link>

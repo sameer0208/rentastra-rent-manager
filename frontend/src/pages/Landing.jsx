@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Building2, Users, CreditCard, LayoutGrid, BarChart3, ArrowRight, ChevronLeft, ChevronRight, Sparkles, Shield, Zap, Quote } from "lucide-react";
 import LandingNavbar from "../components/LandingNavbar";
+import SEO from "../components/SEO";
+import { SITE_URL } from "../config/seo";
 import logoImage from "../assets/images/logo.jpg";
 
 const CAROUSEL_SLIDES = [
@@ -121,8 +124,38 @@ export default function Landing() {
     setTimeout(() => setShowIntro(false), INTRO_FADEOUT_MS);
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "RentAstra",
+        description: "Rent management software for landlords and property managers. Track guests, rooms, payments, and receipts in one place.",
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        inLanguage: "en-IN",
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "RentAstra",
+        url: SITE_URL,
+        description: "Rental property management software – guest management, rent tracking, receipts, and compliance for landlords.",
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <SEO
+        title="Rent Management Software for Landlords & Property Managers"
+        description="Manage tenants, rent payments, receipts, and documents in one place. RentAstra helps landlords and property managers track guests, rooms, payments, and compliance. Free to start."
+      />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
       {/* Intro overlay: typing + cinematic logo */}
       {showIntro && (
         <div
@@ -158,7 +191,7 @@ export default function Landing() {
             >
               <img
                 src={logoImage}
-                alt="RentAstra"
+                alt="RentAstra – Rent management software logo"
                 className="max-h-[140px] sm:max-h-[200px] w-auto object-contain rounded-2xl shadow-2xl shadow-indigo-500/20 ring-2 ring-white/10"
               />
             </div>
@@ -168,8 +201,10 @@ export default function Landing() {
 
       <LandingNavbar />
 
+      <main id="main-content" aria-label="Main content">
       {/* Hero */}
       <section
+        aria-labelledby="hero-heading"
         className="relative pt-28 pb-20 sm:pt-36 sm:pb-28 px-4 sm:px-6 overflow-hidden landing-hero-pattern"
         style={{
           background: "linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 100%)",
@@ -189,7 +224,7 @@ export default function Landing() {
             <Building2 className="w-4 h-4" />
             <span>Rental property management, simplified</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 dark:text-white tracking-tight">
             Manage rent{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400">
               smarter
@@ -350,6 +385,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-10 px-4 sm:px-6">

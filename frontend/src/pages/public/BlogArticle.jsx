@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const ARTICLES = {
   "manage-rental-properties-efficiently": {
@@ -58,6 +59,7 @@ export default function BlogArticle() {
   if (!article) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
+        <SEO title="Blog" description="RentAstra blog and articles." path="/blog" noindex />
         <p className="text-slate-600 dark:text-slate-400">Article not found.</p>
         <Link to="/blog" className="mt-4 inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Back to Blog
@@ -66,8 +68,11 @@ export default function BlogArticle() {
     );
   }
 
+  const metaDescription = article.content[0]?.slice(0, 155) || `${article.title} – RentAstra blog.`;
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO title={article.title} description={metaDescription} path={`/blog/${slug}`} />
       <Link to="/blog" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-8">
         <ArrowLeft className="w-4 h-4" /> Back to Blog
       </Link>

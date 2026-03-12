@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import SEO from "../../components/SEO";
 
 export default function Privacy() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <SEO
+        title="Privacy Policy"
+        description="RentAstra privacy policy: how we collect, use, and protect your data. Information we collect, cookies, and contact details."
+        path="/privacy"
+      />
       <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Privacy Policy</h1>
       <p className="text-sm text-slate-500 dark:text-slate-400 mb-10">Last updated: {new Date().toLocaleDateString()}</p>
 

@@ -4,6 +4,7 @@ import api from "../services/api";
 import toast from "react-hot-toast";
 import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon, Home } from "lucide-react";
+import SEO from "../components/SEO";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,11 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center p-4 transition-colors duration-300 relative">
+      <SEO
+        title="Sign In"
+        description="Sign in to your RentAstra account to manage tenants, rent payments, and property."
+        path="/login"
+      />
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
         <Link
           to="/"
