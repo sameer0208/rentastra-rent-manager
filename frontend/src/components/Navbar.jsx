@@ -1,5 +1,5 @@
 import { logout } from "../utils/auth";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { UserCircle, Sun, Moon, Building2, ChevronDown, Plus, Pencil, Trash2, Menu, X } from "lucide-react";
 import api from "../services/api";
@@ -13,7 +13,6 @@ import logoImage from "../assets/images/logo.jpg";
 
 export default function Navbar() {
   const location = useLocation();
-  const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const propertyDropdownRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
@@ -75,7 +74,8 @@ export default function Navbar() {
       clearPropertyStore(null);
       clearUser();
       logout();
-      navigate("/");
+      // Full page load so landing renders correctly (avoids blank screen after SPA navigate)
+      window.location.href = "/";
     }, 700);
   };
 

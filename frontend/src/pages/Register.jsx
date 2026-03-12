@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import toast from "react-hot-toast";
 import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon, Home } from "lucide-react";
+import { fetchCountries, fetchStatesByCountry } from "../services/countriesApi";
+import PincodeInput from "../components/PincodeInput";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -14,14 +16,44 @@ export default function Register() {
     email: "",
     countryCode: "+91",
     phone: "",
+    country: "India",
+    state: "",
+    city: "",
+    pincode: "",
     password: "",
     propertyName: "",
     propertyAddress: "",
   });
 
   const [phoneError, setPhoneError] = useState("");
-
   const [loading, setLoading] = useState(false);
+  const [countries, setCountries] = useState([{ name: "India", code: "IN" }]);
+  const [states, setStates] = useState([]);
+  const [statesLoading, setStatesLoading] = useState(false);
+
+  useEffect(() => {
+    fetchCountries()
+      .then((list) => setCountries(Array.isArray(list) && list.length ? list : [{ name: "India", code: "IN" }]))
+      .catch(() => setCountries([{ name: "India", code: "IN" }]));
+  }, []);
+
+  useEffect(() => {
+    if (!form.country) {
+      setStates([]);
+      return;
+    }
+    setStatesLoading(true);
+    fetchStatesByCountry(form.country)
+      .then((list) => {
+        setStates(list);
+        setForm((f) => ({ ...f, state: list.includes(f.state) ? f.state : "" }));
+      })
+      .catch(() => {
+        setStates([]);
+        toast.error("Could not load states");
+      })
+      .finally(() => setStatesLoading(false));
+  }, [form.country]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -37,7 +69,22 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await api.post("/auth/register", { ...form, phone: form.phone.trim() });
+      const country = typeof form.country === "string" ? form.country.trim() : "";
+      const state = typeof form.state === "string" ? form.state.trim() : "";
+      const city = typeof form.city === "string" ? form.city.trim() : "";
+      const pincode = typeof form.pincode === "string" ? String(form.pincode).replace(/\D/g, "").slice(0, 10) : "";
+      await api.post("/auth/register", {
+        fullName: form.fullName,
+        email: form.email,
+        phone: form.phone.trim(),
+        password: form.password,
+        propertyName: form.propertyName,
+        propertyAddress: form.propertyAddress,
+        country,
+        state,
+        city,
+        pincode,
+      });
       toast.success("Account created successfully. Please login.");
       navigate("/login");
     } catch (err) {
@@ -149,6 +196,65 @@ export default function Register() {
             {phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
             )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
+              Country
+            </label>
+            <select
+              name="country"
+              value={form.country}
+              onChange={(e) => setForm({ ...form, country: e.target.value })}
+              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select country</option>
+              {countries.map((c) => (
+                <option key={c.code || c.name} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
+              State
+            </label>
+            <select
+              name="state"
+              value={form.state}
+              onChange={(e) => setForm({ ...form, state: e.target.value })}
+              disabled={!form.country || statesLoading}
+              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <option value="">Select state</option>
+              {states.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
+              City
+            </label>
+            <input
+              type="text"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter city"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
+              Pincode (6 digits)
+            </label>
+            <PincodeInput
+              value={form.pincode}
+              onChange={(val) => setForm({ ...form, pincode: val })}
+            />
           </div>
 
           <div>
