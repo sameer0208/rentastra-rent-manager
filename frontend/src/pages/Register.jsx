@@ -8,6 +8,7 @@ import { fetchCountries, fetchStatesByCountry } from "../services/countriesApi";
 import PincodeInput from "../components/PincodeInput";
 import SEO from "../components/SEO";
 import PublicFooter from "../components/PublicFooter";
+import { trackEvent } from "../utils/analytics";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ export default function Register() {
         city,
         pincode,
       });
+      trackEvent("user_signup", { method: "email" });
       toast.success("Account created successfully. Please login.");
       navigate("/login");
     } catch (err) {

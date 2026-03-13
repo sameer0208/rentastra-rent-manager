@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import VacateGuestModal from "../components/VacateGuestModal";
 import ConfirmModal from "../components/ConfirmModal";
 import DocumentViewModal from "../components/DocumentViewModal";
+import { trackEvent } from "../utils/analytics";
 
 export default function Guests() {
   const [guests, setGuests] = useState([]);
@@ -87,6 +88,7 @@ export default function Guests() {
         roomId: form.roomId,
       });
 
+      trackEvent("guest_added", { page: "guests" });
       toast.success("Guest added");
       setForm({ name: "", phone: "", roomId: "", rent: "" });
       loadGuests();
