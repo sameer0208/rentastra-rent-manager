@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Building2, Users, CreditCard, LayoutGrid, BarChart3, ArrowRight, ChevronLeft, ChevronRight, Sparkles, Shield, Zap, Quote } from "lucide-react";
 import LandingNavbar from "../components/LandingNavbar";
+import LandingDemoSection from "../components/LandingDemoSection";
 import SEO from "../components/SEO";
 import { SITE_URL } from "../config/seo";
 import logoImage from "../assets/images/logo.jpg";
@@ -331,6 +332,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Demo video / animated app preview */}
+      <LandingDemoSection />
 
       {/* Features */}
       <section className="py-20 sm:py-28 px-4 sm:px-6 relative overflow-hidden">
