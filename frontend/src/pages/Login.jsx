@@ -6,6 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon, Home } from "lucide-react";
 import SEO from "../components/SEO";
 import PublicFooter from "../components/PublicFooter";
+import { trackEvent } from "../utils/analytics";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,6 +20,7 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
+      trackEvent("user_login", { method: "email" });
       toast.success("Welcome back!");
       window.location.href = "/dashboard";
     } catch (err) {

@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import DatePicker from "react-datepicker";
 import ConfirmModal from "../components/ConfirmModal";
 import { useProperty } from "../context/PropertyContext";
+import { trackEvent } from "../utils/analytics";
 
 <style>
   {`
@@ -107,6 +108,7 @@ export default function Payments() {
         paymentMode: mode,
       });
 
+      trackEvent("payment_recorded", { currency: "INR" });
       toast.success(
         `₹${amountPaid} received via ${mode} from ${payment.guest?.name}`,
       );

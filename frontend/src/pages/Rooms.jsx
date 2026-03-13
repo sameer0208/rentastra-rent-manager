@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import toast from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
+import { trackEvent } from "../utils/analytics";
 
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
@@ -46,6 +47,7 @@ export default function Rooms() {
     e.preventDefault();
     try {
       await api.post("/rooms", form);
+      trackEvent("room_added");
       toast.success(`Room ${form.roomNumber} added`);
       setForm({ roomNumber: "", floor: "", rent: "" });
       loadRooms();

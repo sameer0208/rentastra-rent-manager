@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import TrackPageViews from "./components/TrackPageViews";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
@@ -42,6 +43,7 @@ const PublicOnlyRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
+      <TrackPageViews />
       <Routes>
         {/* LANDING (public; redirect to dashboard if already logged in) */}
         <Route path="/" element={isLoggedIn() ? <Navigate to="/dashboard" replace /> : <Landing />} />
