@@ -180,3 +180,60 @@
 .dark .react-datepicker__month-container {
   background: #1e293b !important;
 }
+
+/* Landing demo section: animated app preview */
+.demo-section-frame {
+  animation: demoFramePulse 8s ease-in-out infinite;
+}
+@keyframes demoFramePulse {
+  0%, 100% { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); }
+  50% { box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.15); }
+}
+
+.demo-preview-inner {
+  animation: demoPreviewIn 1.2s ease-out forwards;
+}
+@keyframes demoPreviewIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.demo-float {
+  opacity: 0;
+  animation: demoFloatIn 0.6s ease-out forwards;
+}
+@keyframes demoFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Demo section: scene transitions (video-like explainer) */
+.demo-scene-text {
+  animation: demoSceneIn 0.5s ease-out forwards;
+}
+.demo-scene-ui {
+  animation: demoSceneIn 0.5s ease-out 0.1s forwards;
+  opacity: 0;
+}
+@keyframes demoSceneIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

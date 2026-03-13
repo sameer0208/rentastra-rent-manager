@@ -7,6 +7,7 @@ import { Sun, Moon, Home } from "lucide-react";
 import { fetchCountries, fetchStatesByCountry } from "../services/countriesApi";
 import PincodeInput from "../components/PincodeInput";
 import SEO from "../components/SEO";
+import PublicFooter from "../components/PublicFooter";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -96,14 +97,18 @@ export default function Register() {
     }
   };
 
+  const inputClass =
+    "w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors";
+  const labelClass = "block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1";
+
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center p-4 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex flex-col transition-colors duration-300">
       <SEO
         title="Create Account"
         description="Create your free RentAstra account. Manage multiple properties, guests, rent payments, and receipts in one place. No credit card required."
         path="/register"
       />
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+      <header className="flex-shrink-0 flex justify-between items-center p-4">
         <Link
           to="/"
           className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-sm"
@@ -119,219 +124,196 @@ export default function Register() {
         >
           {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
-      </div>
+      </header>
 
-      <div className="bg-white dark:bg-slate-800 shadow-xl dark:shadow-none dark:border dark:border-slate-600 rounded-2xl w-full max-w-md p-5 sm:p-8 animate-slide-up mx-2 sm:mx-0">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-            RentAstra
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Create your account</p>
-        </div>
-
-        {/* FORM */}
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              required
-              value={form.fullName}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
-            />
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-6 sm:py-8">
+        <div className="bg-white dark:bg-slate-800 shadow-xl dark:shadow-none dark:border dark:border-slate-600 rounded-2xl w-full p-6 sm:p-8 lg:p-10 animate-slide-up">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100">
+              RentAstra
+            </h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Create your account</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              required
-              value={form.email}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
+          <form onSubmit={handleRegister} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelClass}>Full Name</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  required
+                  value={form.fullName}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Your full name"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={form.email}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Mobile Number
-            </label>
+            <div>
+              <label className={labelClass}>Mobile Number</label>
+              <div className="flex">
+                <select
+                  name="countryCode"
+                  value={form.countryCode}
+                  onChange={handleChange}
+                  className="border border-slate-300 dark:border-slate-600 rounded-l-xl px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="+91">+91 (India)</option>
+                  <option value="+1">+1 (USA)</option>
+                  <option value="+44">+44 (UK)</option>
+                  <option value="+971">+971 (UAE)</option>
+                </select>
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  value={form.phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    setForm({ ...form, phone: value });
+                    setPhoneError(value.length && value.length !== 10 ? "Mobile number must be exactly 10 digits" : "");
+                  }}
+                  maxLength={10}
+                  className={`flex-1 border-t border-b border-r border-slate-300 dark:border-slate-600 rounded-r-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 min-w-0 ${
+                    phoneError ? "border-red-500 dark:border-red-400" : ""
+                  }`}
+                  placeholder="9876543210"
+                />
+              </div>
+              {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
+            </div>
 
-            <div className="flex">
-              <select
-                name="countryCode"
-                value={form.countryCode}
-                onChange={handleChange}
-                className="border border-slate-300 dark:border-slate-600 rounded-l-xl px-2 py-2 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none"
-              >
-                <option value="+91">+91 (India)</option>
-                <option value="+1">+1 (USA)</option>
-                <option value="+44">+44 (UK)</option>
-                <option value="+971">+971 (UAE)</option>
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelClass}>Country</label>
+                <select
+                  name="country"
+                  value={form.country}
+                  onChange={(e) => setForm({ ...form, country: e.target.value })}
+                  className={inputClass}
+                >
+                  <option value="">Select country</option>
+                  {countries.map((c) => (
+                    <option key={c.code || c.name} value={c.name}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>State</label>
+                <select
+                  name="state"
+                  value={form.state}
+                  onChange={(e) => setForm({ ...form, state: e.target.value })}
+                  disabled={!form.country || statesLoading}
+                  className={inputClass + " disabled:opacity-60 disabled:cursor-not-allowed"}
+                >
+                  <option value="">Select state</option>
+                  {states.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-              {/* Phone Input */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelClass}>City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Enter city"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Pincode (6 digits)</label>
+                <PincodeInput
+                  value={form.pincode}
+                  onChange={(val) => setForm({ ...form, pincode: val })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelClass}>Property Name</label>
+                <input
+                  type="text"
+                  name="propertyName"
+                  required
+                  value={form.propertyName}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="e.g. XYZ Towers, ABC Residency"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Property Address (Optional)</label>
+                <input
+                  type="text"
+                  name="propertyAddress"
+                  value={form.propertyAddress}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Full address"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className={labelClass}>Password</label>
               <input
-                type="tel"
-                name="phone"
+                type="password"
+                name="password"
                 required
-                value={form.phone}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, ""); // numbers only
-                  setForm({ ...form, phone: value });
-
-                  if (value.length !== 10) {
-                    setPhoneError("Mobile number must be exactly 10 digits");
-                  } else {
-                    setPhoneError("");
-                  }
-                }}
-                maxLength={10}
-                className={`w-full border-t border-b border-r border-slate-300 dark:border-slate-600 rounded-r-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 ${
-                  phoneError ? "border-red-500 dark:border-red-400" : ""
-                }`}
-                placeholder="9876543210"
+                value={form.password}
+                onChange={handleChange}
+                className={inputClass}
+                placeholder="Min. 6 characters"
               />
             </div>
 
-            {phoneError && (
-              <p className="text-red-500 text-xs mt-1">{phoneError}</p>
-            )}
-          </div>
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-indigo-600 dark:bg-indigo-500 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? "Creating account..." : "Register"}
+              </button>
+            </div>
+          </form>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Country
-            </label>
-            <select
-              name="country"
-              value={form.country}
-              onChange={(e) => setForm({ ...form, country: e.target.value })}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
+          <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
             >
-              <option value="">Select country</option>
-              {countries.map((c) => (
-                <option key={c.code || c.name} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              State
-            </label>
-            <select
-              name="state"
-              value={form.state}
-              onChange={(e) => setForm({ ...form, state: e.target.value })}
-              disabled={!form.country || statesLoading}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <option value="">Select state</option>
-              {states.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              City
-            </label>
-            <input
-              type="text"
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter city"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Pincode (6 digits)
-            </label>
-            <PincodeInput
-              value={form.pincode}
-              onChange={(val) => setForm({ ...form, pincode: val })}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Property Name
-            </label>
-            <input
-              type="text"
-              name="propertyName"
-              required
-              value={form.propertyName}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-indigo-500"
-              placeholder="XYZ Towers, ABC Residency, etc."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Property Address (Optional)
-            </label>
-            <input
-              type="text"
-              name="propertyAddress"
-              value={form.propertyAddress}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              value={form.password}
-              onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full bg-indigo-600 dark:bg-indigo-500 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-70 disabled:cursor-not-allowed ${
-              loading ? "" : ""
-            }`}
-          >
-            {loading ? "Creating account..." : "Register"}
-          </button>
-        </form>
-
-        <div className="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
-          Already have an account?{" "}
-          <button
-            type="button"
-            onClick={() => navigate("/login")}
-            className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            Login
-          </button>
+              Login
+            </button>
+          </p>
         </div>
+      </main>
 
-        {/* FOOTER */}
-        <div className="mt-4 text-center text-xs text-slate-400">
-          © {new Date().getFullYear()} RentAstra
-        </div>
-      </div>
+      <PublicFooter />
     </div>
   );
 }
